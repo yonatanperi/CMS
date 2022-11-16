@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CMS</title>
+        <!-- Compiled and minified CSS. Just for design purposes -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        
+        <!-- Compiled and minified icons. Just for design purposes -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <!-- Compiled and minified JavaScript. Just for design purposes -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>             
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>   
+        <script src = "./worldmap.js"></script>   
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    </head>
+
+    <body>
+
+        <!-- Side bar -->
+        <ul id="nav-mobile" class="sidenav sidenav-fixed" style="transform: translateX(0px);">
+            <li class="bold"><a href="/" class="red-text text-lighten-3 center"><h4>Side Bar</h4></a></li>
+            <br>
+            <li class="no-padding">
+              <ul class="collapsible collapsible-accordion">
+                <li class="bold"><a href="/countries" class="waves-effect waves-teal" tabindex="0">Countries</a></li>
+                <li class="bold"><a href="/worldmap" class="waves-effect waves-teal" tabindex="0">World Map</a></li>
+              </ul>
+            </li>
+        </ul>
+
+        <!-- Title -->
+        <div class="row red-text text-lighten-3">
+            <div class="col s12 m8 offset-m6 xl7 offset-xl3">
+                <h1 class="header">World Map</h1>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+        <br><br>
+        <!-- Content -->
+        
+        <div class="row">
+            <div class="col s12 m8 offset-m6 xl7 offset-xl3">
+                <!--The div element for the map -->
+                <div id="map" style="height: 700px; width: 100%;"></div>
+
+                <script
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+                defer
+                ></script>
+            </div>
+        </div>
+    </body>
+
+
+</html>
