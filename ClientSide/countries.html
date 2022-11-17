@@ -56,6 +56,7 @@
               <th>ISO</th>
               <th>Code</th>
               <th>Phone Code</th>
+              <th>Lat, Long</th>
               <th>Flag</th>
               <th>Actions</th>
           </tr>
@@ -170,20 +171,21 @@ function side_paginate(current_num, side){
 }
 
 
-function getRow(name, code, phone_code, iso){
+function getRow(data){
   return `
-    <td>${name}</td>
-    <td>${iso}</td>
-    <td>${code || "No Code"}</td>
-    <td>${phone_code || "No Phone Code"}</td>
+    <td>${data["Name"]}</td>
+    <td>${data["Iso"]}</td>
+    <td>${data["NumCode"] || "No Code"}</td>
+    <td>${data["PhoneCode"] || "No Phone Code"}</td>
+    <td>${data["Latitude"] || "No Latitude"}, ${data["Longitude"] || "No Longitude"}</td>
     <td>
         <div class="col s2 m4 l2">
-            <img src="https://countryflagsapi.com/png/${iso}" style="width: 70px; height: auto;">
+            <img src="https://countryflagsapi.com/png/${data["Iso"]}" style="width: 70px; height: auto;">
         </div>
     </td>
     <td>
-        <a href="#edit_modal" onclick="edit('${iso}')" class="btn modal-trigger btn-floating waves-effect waves-light red lighten-2"><i class="material-icons">edit</i></a>
-        <a onclick="delete_country('${iso}')" class="btn-floating waves-effect waves-light red lighten-2"><i class="material-icons">delete</i></a>
+        <a href="#edit_modal" onclick="edit('${data["Iso"]}')" class="btn modal-trigger btn-floating waves-effect waves-light red lighten-2"><i class="material-icons">edit</i></a>
+        <a onclick="delete_country('${data["Iso"]}')" class="btn-floating waves-effect waves-light red lighten-2"><i class="material-icons">delete</i></a>
 
     </td>
   `;
@@ -232,7 +234,7 @@ function postForm(offset=0){
     data.forEach((arg) => {
       // Add info to page
       const table_body = document.getElementById("table_body");
-      current_row = getRow(arg["Name"], arg["NumCode"], arg["PhoneCode"], arg["Iso"])
+      current_row = getRow(arg)
       const tr = document.createElement("tr");
       tr.innerHTML += current_row;
       table_body.appendChild(tr);

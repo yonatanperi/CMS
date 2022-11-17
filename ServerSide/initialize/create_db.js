@@ -20,4 +20,4 @@ console.log("Connected to SQL!");
 // Create 'cms_schema' schema if not exists.
 execute_query(con, `create schema if not exists ${schema_name}`)
 
-console.log("Done.");
+console.log("Done.\nYou can close the process.");

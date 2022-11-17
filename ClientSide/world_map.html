@@ -1,34 +1,75 @@
 <script>
-    function initMap() {
-    const myLatLng = { lat: -25.363, lng: 131.044 };
+async function postData(url, data, method="POST") {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: method, // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
+}
 
+function initMap() {
     mapOptions = {
-        zoom: 4,
-        center: myLatLng,
+        zoom: 2,
+        center: {lat: 0, lng: 0},
     }
 
     const map = new google.maps.Map(document.getElementById("map"), mapOptions);
-  
-    new google.maps.Marker({
-      position: myLatLng,
-      map,
-      title: "Hello World!",
-    });
-    const image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAABcCAMAAADUMSJqAAAAaVBMVEX///8AOLgANrjGyOgAH7MNObn4+fwpP7oAELHn6fUAJLQAM7f19vsAJ7UALrYAIbPt8PnU1+63vuQAG7OOmdVmdMk3UL7Izelfb8eiqdzf4/MgMrcwRLuGkdOvt+E/Vb9yfsxHW8EsSr1o0zfYAAABhElEQVRoge2ZfW+CMBCHeyes0NKCoqgIvvD9P+TO6USWLFmE3+Zin380NT4lcHe9FqUCgRdgBkRFQBQBCfIgD/KnljMQFQNRb0D+ejn5LeZzoPx0wrkXZblAubOGuclA8qUhMkuMu3bnrHM1RL7yXFXsVwj3uqR8NsupXAPklfUbpTbeVtO7tzmz3O6aOd9OIqx3+oYlihutm5jI9qO7EY+3NX1xluJ/93HBtCMuPYtFViZJItdtkyvX76XMEo9KqX0uIZKmWcf2UKQfFAfLVZamEjj5foxbSpW1UqwWEZlbQZwbOpeYyy+juJgi9sd+7Og5kiJ2N9+jiEm3nl3RDxWOfasH8z1I4Zk9uUFsbx2dR4vv/vNzxESsh2NagshNkksdk/lST9aGuJvCDZUjbwv0gSJDEZpEyPRHFi5oyUUuFthl7o7JF+gByNYC2xRB27nPRjSFyKEtNLb5h25bsBsu7FbxqYAeLECPRHBHOcz/+IwryIM8yEfKoS+hoK/PAoEX4B0nTy+6weQ4NgAAAABJRU5ErkJggg==";
-    const israel = new google.maps.Marker({
-      position: { lat: 35.363, lng: -110.044 },
-      map,
-      title: "Hello World!",
-      icon: image,
-    });
-  
-    google.maps.event.addListener(israel,'click',function() {
-     alert("israel!")
+    
+
+    // Get all countries
+    postData('/worldmap', {})
+    .then((data) => {
+        data.forEach((arg) => {
+            // Add marker
+            const flag_url = `https://countryflagsapi.com/png/${arg["Iso"]}`;
+            if (arg["Latitude"] != null && arg["Longitude"] != null){
+                const image = {
+                    url: flag_url, // url
+                    scaledSize: new google.maps.Size(41, 30), // scaled size
+                };
+                const marker = new google.maps.Marker({
+                position: {lat: arg["Latitude"], lng: arg["Longitude"]},
+                map,
+                icon: image,
+                });
+                
+                // Open modal when clicked
+                google.maps.event.addListener(marker,'click',function() {
+                    // Add info to modal
+                    document.getElementById("flag").setAttribute("src", flag_url);
+                    document.getElementById("name").innerHTML = arg["Name"];
+                    document.getElementById("iso").innerHTML = arg["Iso"];
+                    document.getElementById("code").innerHTML = arg["NumCode"];
+                    document.getElementById("phone_code").innerHTML = arg["PhoneCode"];
+                    document.getElementById("pos").innerHTML = `${arg["Latitude"]}, ${arg["Longitude"]}`;
+                    document.getElementById("description").innerHTML = arg["Description"] == null? "What a wonderful country!" : arg["Description"];
+
+                    // Show the modal
+                    $(document).ready(function(){
+                        $('#modal').modal();
+                        $('#modal').modal('open'); 
+                    });
+                });
+            }            
+        });
     });
 }
   
 window.initMap = initMap;
+window.onload = getCountries;
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
 <!-- Title -->
 <div class="row red-text text-lighten-3">
@@ -46,8 +87,46 @@ window.initMap = initMap;
         <!--The div element for the map -->
         <div id="map" style="height: 700px; width: 100%;"></div>
 
+        <!-- Modal Structure -->
+        <div id="modal" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h3 id="name" class="header"></h3>
+                <ul class="collection">
+                  <li class="collection-item avatar">
+                    <img id="flag" src="" class="circle">
+                    <span class="title">Flag</span>
+                  </li>
+                  <li class="collection-item avatar">
+                    <i class="material-icons circle red">featured_play_list</i>
+                    <span class="title">ISO</span>
+                    <p id="iso"></p>
+                  </li>
+                  <li class="collection-item avatar">
+                    <i class="material-icons circle black">code</i>
+                    <span class="title">Code</span>
+                    <p id="code"></p>
+                  </li>
+                  <li class="collection-item avatar">
+                    <i class="material-icons circle blue">local_phone</i>
+                    <span class="title">Phone Code</span>
+                    <p id="phone_code"></p>
+                  </li>
+                  <li class="collection-item avatar">
+                    <i class="material-icons circle green">location_on</i>
+                    <span class="title">Lat / Long</span>
+                    <p id="pos"></p>
+                  </li>
+                  <li class="collection-item avatar">
+                    <i class="material-icons circle gray">format_align_left</i>
+                    <span class="title">Description</span>
+                    <p id="description"></p>
+                  </li>
+                </ul>
+              </div>
+        </div>
+
         <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCZmFzHBm9nZMiYY8Uue7cbA0PoxE15-I&callback=initMap&v=weekly"
         defer
         ></script>
     </div>

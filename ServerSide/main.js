@@ -90,23 +90,25 @@ app.put('/countries', urlencodedParser, (req, res) => {
         (err, result) => {
             if (err) throw err;
             result = result[0];
-            const a = async () => {
-                let extra = await fetch(`http://api.positionstack.com/v1/forward?access_key=1690b563e94702e57cf1bd7ec33d5b0e&query=${result["Name"]}&output=json`);
-                extra = await extra.json(); //extract JSON from the http response
-                extra = extra["data"][0];
-
-                if (result.Latitude == null) result.Latitude = extra["latitude"];
-                if (result.Longitude == null) result.Longitude = extra["longitude"];
-                res.send(result);
-            }
-            a();       
+            res.send(result);      
         });
     });    
 });
 
 app.delete("/countries", (req, res) => {
     execute_query(con, "delete from Countries where Iso = ?", [req.body["Iso"]]);
-    res.send("");
+    res.send();
 })
+
+app.post('/worldmap', urlencodedParser, (req, res) => {
+    con.connect(function(err) {
+        if (err) throw err;
+        con.query(`select * from Countries`,
+        (err, result) => {
+            if (err) throw err;
+            res.send(result);
+        });
+    });    
+});
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

@@ -28,4 +28,4 @@ con.connect(function(err) {
     });
 });
 
-console.log("Done.");
+console.log("Done.\nYou can close the process.");
