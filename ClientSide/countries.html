@@ -1,3 +1,4 @@
+<!-- Script for the modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
 <!-- Title -->
@@ -123,6 +124,7 @@
 </div>
 
 <script>
+// Send data to server
 async function postData(url, data, method="POST") {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -141,7 +143,7 @@ async function postData(url, data, method="POST") {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
-// when pagination clicked
+// When pagination clicked
 function paginate(number, post=true){
 
   const starting_from = parseInt((number - 1) / 5) * 5 + 1
@@ -160,6 +162,7 @@ function paginate(number, post=true){
   if(post) postForm((number - 1) * 10);
 }
 
+// When side pagination clicked
 function side_paginate(current_num, side){
   // side: false - left, true - right
   if (side){
@@ -170,7 +173,7 @@ function side_paginate(current_num, side){
   }
 }
 
-
+// Generate html data for one table row
 function getRow(data){
   return `
     <td>${data["Name"]}</td>
@@ -191,6 +194,7 @@ function getRow(data){
   `;
 }
 
+// Edit country info
 function edit(iso){
   postData('/countries', {
     "Iso": iso,
@@ -212,6 +216,8 @@ function edit(iso){
   });  
 }
 
+
+// Delete country
 function delete_country(iso){
   postData('/countries', {
     "Iso": iso
@@ -220,6 +226,8 @@ function delete_country(iso){
     M.toast({html: 'Country removed! Refresh page!'});
 }
 
+
+// Send all the relevant form data to server
 function postForm(offset=0){
   // Remove old info from page
   document.getElementById("table_body").innerHTML = '';

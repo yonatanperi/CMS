@@ -1,3 +1,9 @@
+/*
+Add more information to the 'Countries' table.
+Get the extra data from 'api.positionstack.com' api.
+*/
+
+// Some consts
 const mysql = require('mysql2');
 const execute_query = require("../sql_handler").execute_query;
 const countries_info_api_key = "1690b563e94702e57cf1bd7ec33d5b0e";
@@ -9,7 +15,7 @@ const countries_info_api_add = "http://api.positionstack.com/v1/forward?access_k
 const con_options = {
     host: process.env.SQL_HOST || "localhost",
     user: process.env.SQL_USER || "root",
-    password: process.env.SQL_PASSWORD || "7324545",
+    password: process.env.SQL_PASSWORD,
     database: process.env.DB_NAME || "cms_schema",
     multipleStatements: true,
 }

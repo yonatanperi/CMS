@@ -1,3 +1,5 @@
+// Exports this usful function.
+
 function execute_query (sql_connection, query, params) {
     // Don't return the result
     sql_connection.connect(function(err) {

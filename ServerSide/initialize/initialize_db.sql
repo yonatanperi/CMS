@@ -1,13 +1,14 @@
 CREATE TABLE Countries (
-  Id  int NOT NULL PRIMARY KEY,
-  Iso  varchar(2) NOT NULL UNIQUE,
-  Name  varchar(80) NOT NULL,
-  Iso3  varchar(3) NULL,
-  NumCode int  NULL,
-  PhoneCode int NOT NULL,
-  Latitude float Null,
-  Longitude float NULL,
-  Description varchar(200) NULL);
+  Id  int NOT NULL PRIMARY KEY, -- PPRIMARY KEY
+  Iso  varchar(2) NOT NULL UNIQUE, -- Two letters which define the country
+  Name  varchar(80) NOT NULL,  -- Country full name
+  Iso3  varchar(3) NULL, -- Three letters which define the country
+  NumCode int  NULL, -- Country code
+  PhoneCode int NOT NULL, -- Country phone code
+  Latitude float Null, -- Latitude position
+  Longitude float NULL, -- Longitude position
+  Description varchar(200) NULL -- Display default description on client side if null.
+);
 
 INSERT INTO Countries (Id, Iso, Name, Iso3, NumCode, PhoneCode) VALUES
 (1, 'AF', 'Afghanistan', 'AFG', 4, 93),

@@ -1,3 +1,9 @@
+/*
+Create the 'Countries' table.
+Get the countries data from initialize.sql file.
+*/
+
+// Some consts
 const fs = require('fs');
 const mysql = require('mysql2');
 const execute_query = require("../sql_handler").execute_query;
@@ -5,7 +11,7 @@ const execute_query = require("../sql_handler").execute_query;
 const con_options = {
     host: process.env.DB_HOST || "localhost",
     user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "7324545",
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || "cms_schema",
     multipleStatements: true,
 }

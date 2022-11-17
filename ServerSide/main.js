@@ -1,3 +1,9 @@
+/*
+The main program.
+Run the server by run this file.
+*/
+
+// Some consts
 const mysql = require('mysql2');
 const execute_query = require("./sql_handler").execute_query;
 const express = require("express");
@@ -15,7 +21,7 @@ const PORT = process.env.PORT || 1234; // Please initiailze
 const con_options = {
     host: process.env.DB_HOST || "localhost",
     user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "7324545",
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || "cms_schema",
     multipleStatements: true,
 }
@@ -38,6 +44,7 @@ function add_header_footer(path_to_html){
 } 
 
 // Listen to reqs
+
 app.get("/", (req, res) => {
     res.send(add_header_footer("../ClientSide/index.html"));
 })
@@ -106,9 +113,11 @@ app.post('/worldmap', urlencodedParser, (req, res) => {
         con.query(`select * from Countries`,
         (err, result) => {
             if (err) throw err;
+            // Send all the information in the table to user
             res.send(result);
         });
     });    
 });
 
+// Start listening
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

@@ -1,3 +1,8 @@
+/*
+Create the 'cms_schema' data base.
+*/
+
+// Some consts
 const mysql = require('mysql2');
 const execute_query = require("../sql_handler").execute_query;
 
@@ -7,7 +12,7 @@ const execute_query = require("../sql_handler").execute_query;
 const con_options = {
     host: process.env.SQL_HOST || "localhost",
     user: process.env.SQL_USER || "root",
-    password: process.env.SQL_PASSWORD || "7324545",
+    password: process.env.SQL_PASSWORD,
     multipleStatements: true,
 }
 

@@ -1,4 +1,5 @@
 <script>
+// Send data to server
 async function postData(url, data, method="POST") {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -17,6 +18,7 @@ async function postData(url, data, method="POST") {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
+// Set the map
 function initMap() {
     mapOptions = {
         zoom: 2,
@@ -69,6 +71,7 @@ window.initMap = initMap;
 window.onload = getCountries;
 </script>
 
+<!-- Script for the modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
 <!-- Title -->
@@ -125,6 +128,7 @@ window.onload = getCountries;
               </div>
         </div>
 
+        <!-- The map -->
         <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCZmFzHBm9nZMiYY8Uue7cbA0PoxE15-I&callback=initMap&v=weekly"
         defer
