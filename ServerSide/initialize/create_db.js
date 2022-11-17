@@ -7,12 +7,12 @@ const mysql = require('mysql2');
 const execute_query = require("../sql_handler").execute_query;
 
 // Get from env or hard coded if not initialized.
-// Please initiailze SQL_HOST, SQL_USER, SQL_PASSWORD.
+// Please initiailze DB_HOST, DB_USER, DB_PASSWORD.
 
 const con_options = {
-    host: process.env.SQL_HOST || "localhost",
-    user: process.env.SQL_USER || "root",
-    password: process.env.SQL_PASSWORD,
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD,
     multipleStatements: true,
 }
 

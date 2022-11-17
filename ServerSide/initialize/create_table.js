@@ -8,6 +8,9 @@ const fs = require('fs');
 const mysql = require('mysql2');
 const execute_query = require("../sql_handler").execute_query;
 
+// Get from env or hard coded if not initialized.
+// Please initiailze DB_HOST, DB_USER, DB_PASSWORD.
+
 const con_options = {
     host: process.env.DB_HOST || "localhost",
     user: process.env.DB_USER || "root",

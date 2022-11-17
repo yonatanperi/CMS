@@ -10,12 +10,12 @@ const countries_info_api_key = "1690b563e94702e57cf1bd7ec33d5b0e";
 const countries_info_api_add = "http://api.positionstack.com/v1/forward?access_key=1690b563e94702e57cf1bd7ec33d5b0e&query=israel& output = json";
 
 // Get from env or hard coded if not initialized.
-// Please initiailze SQL_HOST, SQL_USER, SQL_PASSWORD.
+// Please initiailze DB_HOST, DB_USER, DB_PASSWORD.
 
 const con_options = {
-    host: process.env.SQL_HOST || "localhost",
-    user: process.env.SQL_USER || "root",
-    password: process.env.SQL_PASSWORD,
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || "cms_schema",
     multipleStatements: true,
 }
