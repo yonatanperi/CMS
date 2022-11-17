@@ -1,0 +1,250 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+<!-- Title -->
+<div class="row red-text text-lighten-3">
+    <div class="col s12 m8 offset-m6 xl7 offset-xl3">
+        <h1 class="header">Countries</h1>
+    </div>
+</div>
+
+<div class="divider"></div>
+<br><br>
+<!-- Content -->
+<div class="row">
+  <div class="col s12 m8 offset-m6 xl7 offset-xl3">
+    <!-- Search bar -->
+    <nav>
+        <div class="nav-wrapper">
+          <div class="input-field">
+            <input name="search" id="search" type="search">
+            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+            <i class="material-icons">close</i>
+          </div>
+        </div>
+    </nav>
+    
+    <!-- Filter -->
+    <br>
+    <ul id = "dropdown" class = "dropdown-content">
+      <p>
+        <label>
+          <input id="name" name="group1" type="radio" checked />
+          <span>Name</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input id="code" name="group1" type="radio" />
+          <span>Code</span>
+        </label>
+      </p>
+    </ul>  
+
+    <!-- Buttons -->
+    <div class="row center">
+      <a class="btn dropdown-button" data-activates="dropdown">Filters
+        <i class="material-icons right">expand_more</i>
+      </a>
+      <button onclick="postForm();" class="btn">Submit<i class="material-icons right">search</i></button>
+    </div>
+      
+    <!-- The table -->
+    <table>
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>ISO</th>
+              <th>Code</th>
+              <th>Phone Code</th>
+              <th>Flag</th>
+              <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="table_body">
+          <!-- Will be added by js -->
+        </tbody>
+
+      </table>
+
+      <!-- pagination -->
+      <ul class="pagination" id="pagination">
+          <!-- Will be added by js -->
+      </ul>
+
+      <!-- Modal Structure -->
+      <div id="edit_modal" class="modal">
+        <div class="modal-content">
+          <h4 id="edit_header"></h4>
+          <p id="edit_iso"></p>
+          <br>
+          <div class='row'>
+            <p id="edit_name_out" for="edit_name_in">Name:</p>
+            <div class='input-field col s12'>        
+              <input name="edit_name_in" type="text" id="edit_name_in" class="validate">
+              
+            </div>
+          </div>
+
+          <div class='row'>
+            <p id="edit_code_out">Code:</p>
+            <div class='input-field col s12'>
+              <input name="edit_code_in" type="text" id="edit_code_in">
+            </div>
+          </div>
+
+            <div class='row'>
+              <p id="edit_lat_out">Lat:</p>
+              <div class='input-field col s12'>
+                <input name="edit_lat_in" type="text" id="edit_lat_in">
+              </div>
+            </div>           
+            <div class='row'>
+              <p id="edit_long_out">Long:</p>
+              <div class='input-field col s12'>
+                <input name="edit_long_in" type="text" id="edit_long_in">
+              </div>
+            </div>
+            <div class='row'>
+              <p id="edit_description_out">Description:</p>
+              <div class='input-field col s12'>
+                <input name="edit_description_in" type="text" id="edit_description_in">
+              </div>
+            </div>
+            <a onclick="edit(document.getElementById('edit_iso').innerHTML);" class="modal-close waves-effect btn">save</a>
+
+        </div>
+        </div>
+      </div>
+          
+
+  </div>
+</div>
+
+<script>
+async function postData(url, data, method="POST") {
+  // Default options are marked with *
+  const response = await fetch(url, {
+    method: method, // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
+}
+
+// when pagination clicked
+function paginate(number, post=true){
+
+  const starting_from = parseInt((number - 1) / 5) * 5 + 1
+  // recreate pagination
+  const ul = document.getElementById("pagination");
+  ul.innerHTML = "";
+
+  ul.innerHTML += `<li class="${number <= 5 ? "disabled" : "waves-effect"}"><a onclick="side_paginate(${number}, false)"><i class="material-icons">chevron_left</i></a></li>`;
+
+  for (let i = 0; i < 5; i++){
+    ul.innerHTML += `<li class="waves-effect ${i == (number - 1) % 5 ? "active" : ""}"><a onclick="paginate(${i + starting_from})")>${i + starting_from}</a></li>`;
+  }
+
+  ul.innerHTML += `<li class="waves-effect"><a onclick="side_paginate(${number}, true)"><i class="material-icons">chevron_right</i></a></li>`;
+
+  if(post) postForm((number - 1) * 10);
+}
+
+function side_paginate(current_num, side){
+  // side: false - left, true - right
+  if (side){
+    paginate(current_num + 5);
+  }
+  else{
+    paginate(current_num - 5);
+  }
+}
+
+
+function getRow(name, code, phone_code, iso){
+  return `
+    <td>${name}</td>
+    <td>${iso}</td>
+    <td>${code || "No Code"}</td>
+    <td>${phone_code || "No Phone Code"}</td>
+    <td>
+        <div class="col s2 m4 l2">
+            <img src="https://countryflagsapi.com/png/${iso}" style="width: 70px; height: auto;">
+        </div>
+    </td>
+    <td>
+        <a href="#edit_modal" onclick="edit('${iso}')" class="btn modal-trigger btn-floating waves-effect waves-light red lighten-2"><i class="material-icons">edit</i></a>
+        <a onclick="delete_country('${iso}')" class="btn-floating waves-effect waves-light red lighten-2"><i class="material-icons">delete</i></a>
+
+    </td>
+  `;
+}
+
+function edit(iso){
+  postData('/countries', {
+    "Iso": iso,
+    "Name": document.getElementById("edit_name_in").value,
+    "NumCode": parseInt(document.getElementById("edit_code_in").value),
+    "Latitude": parseInt(document.getElementById("edit_lat_in").value),
+    "Longitude": parseInt(document.getElementById("edit_long_in").value),
+    "Description": document.getElementById("edit_description_in").value
+  },
+    "PUT").then((data) => {
+    console.log(data);
+    document.getElementById("edit_header").innerHTML = data["Name"];
+    document.getElementById("edit_iso").innerHTML = data["Iso"];
+    document.getElementById("edit_name_in").setAttribute("placeholder", data["Name"]);
+    document.getElementById("edit_code_in").setAttribute("placeholder", data["NumCode"]);
+    document.getElementById("edit_lat_in").setAttribute("placeholder", data["Latitude"]);
+    document.getElementById("edit_long_in").setAttribute("placeholder", data["Longitude"]);
+    document.getElementById("edit_description_in").setAttribute("placeholder", data["Description"] == null? "What a wonderful country!" : data["Description"]);
+  });  
+}
+
+function delete_country(iso){
+  postData('/countries', {
+    "Iso": iso
+  },
+    "DELETE").then((data) => {});
+    M.toast({html: 'Country removed! Refresh page!'});
+}
+
+function postForm(offset=0){
+  // Remove old info from page
+  document.getElementById("table_body").innerHTML = '';
+
+  // Post data
+  postData('/countries',
+  {"search": document.getElementById("search").value,
+  "filter": document.getElementById("name").checked,
+  "offset": offset})
+  .then((data) => {
+    var current_row;
+    data.forEach((arg) => {
+      // Add info to page
+      const table_body = document.getElementById("table_body");
+      current_row = getRow(arg["Name"], arg["NumCode"], arg["PhoneCode"], arg["Iso"])
+      const tr = document.createElement("tr");
+      tr.innerHTML += current_row;
+      table_body.appendChild(tr);
+    });
+  });
+
+  if (offset == 0) paginate(1, false);
+}
+
+$(document).ready(function () {
+  $('.modal').modal();
+})
+
+window.onload = () => paginate(1);
+</script>

@@ -1,4 +1,5 @@
-function initMap() {
+<script>
+    function initMap() {
     const myLatLng = { lat: -25.363, lng: 131.044 };
 
     mapOptions = {
@@ -27,3 +28,27 @@ function initMap() {
 }
   
 window.initMap = initMap;
+</script>
+
+<!-- Title -->
+<div class="row red-text text-lighten-3">
+    <div class="col s12 m8 offset-m6 xl7 offset-xl3">
+        <h1 class="header">World Map</h1>
+    </div>
+</div>
+
+<div class="divider"></div>
+<br><br>
+<!-- Content -->
+
+<div class="row">
+    <div class="col s12 m8 offset-m6 xl7 offset-xl3">
+        <!--The div element for the map -->
+        <div id="map" style="height: 700px; width: 100%;"></div>
+
+        <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+        defer
+        ></script>
+    </div>
+</div>
